@@ -59,3 +59,13 @@ def get_odds_by_leagueid(league_id, season, date):
     odds_data = json.loads(res.read().decode("utf-8"))
 
     return odds_data
+
+
+def get_fixture_details_by_id(fixture_id):
+    conn = http.client.HTTPSConnection("api-football-v1.p.rapidapi.com")
+    endpoint = f"/v3/fixtures?id={fixture_id}"
+    conn.request("GET", endpoint, headers=HEADERS)
+    res = conn.getresponse()
+    fixture_data = json.loads(res.read().decode("utf-8"))
+
+    return fixture_data

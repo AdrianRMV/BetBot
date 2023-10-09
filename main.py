@@ -1,6 +1,7 @@
 import json
 from api.fetch_data import get_odds_by_leagueid
 from api.fetch_data import get_league_id
+from api.fetch_data import get_fixture_details_by_id
 
 
 def main():
@@ -17,9 +18,16 @@ def main():
         # Obtén los fixtures usando el ID de la liga
         odds_data = get_odds_by_leagueid(league_id, season, date)
         if odds_data:
-            # Muestra el primer resultado de forma legible
-            # print(json.dumps(odds_data["response"][0], indent=4))
-            print(odds_data["response"][0].fixture.id)
+            for fixture in odds_data["response"]:
+                fixture_id = fixture["fixture"]["id"]
+                details = get_fixture_details_by_id(fixture_id)
+
+                home_team = details["response"][0]["teams"]["home"]["name"]
+                away_team = details["response"][0]["teams"]["away"]["name"]
+
+                print(
+                    f"Fixture id: {fixture_id}, Equipos:{home_team} (casa) VS {away_team} (visitante)"
+                )
         else:
             print(f"No se encontraron datos para {league_name} en la fecha {date}.")
     else:
